@@ -1,4 +1,4 @@
-datasource db {
+datasource localhost {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }

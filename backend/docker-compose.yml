@@ -2,11 +2,11 @@ version: '3.1'
 
 services:
 
-  db:
+  localhost:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
+      POSTGRES_PASSWORD: '1234567'
+      POSTGRES_DB: MiniBookStore
     ports:
       - "5432:5432"
