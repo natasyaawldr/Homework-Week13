@@ -14,9 +14,11 @@ import {
   PopoverTrigger,
   Skeleton,
   Text,
+  IconButton,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { FaTrash, FaEdit } from "react-icons/fa"; // Import icons from react-icons
 import { deleteBook, getBookDetailById } from "../modules/fetch";
 
 export default function BookDetails() {
@@ -75,11 +77,15 @@ export default function BookDetails() {
           </Box>
         </Flex>
       )}
-      {localStorage.getItem('token') && (
+      {localStorage.getItem("token") && (
         <HStack>
           <Popover>
             <PopoverTrigger>
-              <Button colorScheme="red">Delete</Button>
+              <IconButton
+                aria-label="Delete"
+                icon={<FaTrash />}
+                colorScheme="red"
+              />
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow />
@@ -94,7 +100,11 @@ export default function BookDetails() {
             </PopoverContent>
           </Popover>
           <Link to={`/editbook/${id}`}>
-            <Button>Edit</Button>
+            <IconButton
+              aria-label="Edit"
+              icon={<FaEdit />}
+              colorScheme="blue"
+            />
           </Link>
         </HStack>
       )}

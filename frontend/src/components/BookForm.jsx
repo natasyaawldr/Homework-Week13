@@ -6,26 +6,37 @@ import {
   Input,
   useToast,
   VStack,
+  Box,
+  Text,
+  Flex,
+  Heading,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { createBook, editBook } from "../modules/fetch";
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function BookForm({ bookData }) {
   const toast = useToast();
   const [selectedImage, setSelectedImage] = useState(null);
+  const navigate = useNavigate();
 
   async function handleSubmit(event) {
     event.preventDefault();
     if (!selectedImage) {
       toast({
         title: "Error",
-        description: "Please select image",
+        description: "Please select an image",
         status: "error",
         duration: 5000,
         isClosable: true,
       });
+      return;
     }
+
     const formData = new FormData(event.target);
+
     if (bookData) {
       try {
         await editBook(
@@ -36,6 +47,7 @@ export default function BookForm({ bookData }) {
           parseInt(formData.get("year")),
           parseInt(formData.get("pages"))
         );
+
         toast({
           title: "Success",
           description: "Book edited successfully",
@@ -43,10 +55,12 @@ export default function BookForm({ bookData }) {
           duration: 5000,
           isClosable: true,
         });
+        navigate("/");
+        
       } catch (error) {
         toast({
           title: "Error",
-          description: error.response.data.message || "Something went wrong",
+          description: error.response?.data?.message || "Something went wrong",
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -54,9 +68,12 @@ export default function BookForm({ bookData }) {
       }
       return;
     }
+
     try {
       await createBook(formData);
+
       event.target.reset();
+      setSelectedImage("");
       toast({
         title: "Success",
         description: "Book created successfully",
@@ -64,11 +81,12 @@ export default function BookForm({ bookData }) {
         duration: 5000,
         isClosable: true,
       });
-      setSelectedImage("");
+      navigate("/");
+
     } catch (error) {
       toast({
         title: "Error",
-        description: error.response.data.message || "Something went wrong",
+        description: error.response?.data?.message || "Something went wrong",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -84,7 +102,7 @@ export default function BookForm({ bookData }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <VStack spacing={4}>
+      <VStack spacing={4} align="start" width="100%">
         <FormControl>
           <FormLabel>Title</FormLabel>
           <Input name="title" required defaultValue={bookData?.title} />
@@ -116,7 +134,9 @@ export default function BookForm({ bookData }) {
           />
         </FormControl>
         {selectedImage && (
-          <Image w={64} src={selectedImage} alt="Selected Image" />
+          <Box>
+            <Image w={64} src={selectedImage} alt="Selected Image" />
+          </Box>
         )}
         {!bookData?.image && (
           <FormControl>
@@ -133,7 +153,9 @@ export default function BookForm({ bookData }) {
           </FormControl>
         )}
 
-        <Button type="submit">{bookData ? "Edit Book" : "Create Book"}</Button>
+        <Button type="submit">
+          {bookData ? "Edit Book" : "Create Book"}
+        </Button>
       </VStack>
     </form>
   );

@@ -2,9 +2,6 @@ import { Card, Heading, Image, Text, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 
-
-
-
 export default function Books({ id, title, author, image, publisher, year }) {
   return (
     <Link to={`/books/${id}`}>
